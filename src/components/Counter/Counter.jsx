@@ -23,6 +23,7 @@ function isPrime(number) {
   return true;
 }
 
+// after moving enteredNumber state management to ConfigureCounter and lifting that state up to App, this solves the issue we were addressing with memo preventing Counter rerendering - leaving memo for reference, but now it's not as necessary since the state management that was causing the component to rerender is no longer in App component
 const Counter = memo(function Counter({ initialCount }) {
   log("<Counter /> rendered", 1);
   const initialCountIsPrime = isPrime(initialCount);
