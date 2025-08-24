@@ -1,4 +1,4 @@
-import { useState, memo, useCallback } from "react";
+import { useState, memo, useCallback, useMemo } from "react";
 
 import IconButton from "../UI/IconButton.jsx";
 import MinusIcon from "../UI/Icons/MinusIcon.jsx";
@@ -26,10 +26,15 @@ function isPrime(number) {
 // after moving enteredNumber state management to ConfigureCounter and lifting that state up to App, this solves the issue we were addressing with memo preventing Counter rerendering - leaving memo for reference, but now it's not as necessary since the state management that was causing the component to rerender is no longer in App component
 const Counter = memo(function Counter({ initialCount }) {
   log("<Counter /> rendered", 1);
-  const initialCountIsPrime = isPrime(initialCount);
+  // useMemo to memoize the isPrime function call, so that it's not called on every render
+  const initialCountIsPrime = useMemo(
+    () => isPrime(initialCount),
+    [initialCount]
+  );
 
   const [counter, setCounter] = useState(initialCount);
 
+  // useCallback to memoize the handleDecrement and handleIncrement functions, so that they're not recreated on every render
   const handleDecrement = useCallback(function handleDecrement() {
     setCounter((prevCounter) => prevCounter - 1);
   }, []);
